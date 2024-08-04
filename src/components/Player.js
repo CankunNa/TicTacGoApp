@@ -1,7 +1,18 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
 
-export default function Player({ initialName, symbol, isActive, onChangeName, isNameChangeDisabled }) {
+export default function Player({
+  initialName,
+  symbol,
+  isActive,
+  onChangeName,
+}) {
   const [playerName, setPlayerName] = useState(initialName);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -19,7 +30,9 @@ export default function Player({ initialName, symbol, isActive, onChangeName, is
 
   return (
     <View style={styles.container}>
-      <Text style={[styles.symbol, isActive ? styles.active : null]}>{symbol}</Text>
+      <Text style={[styles.symbol, isActive ? styles.active : null]}>
+        {symbol}
+      </Text>
       {isEditing ? (
         <TextInput
           style={styles.input}
@@ -31,7 +44,7 @@ export default function Player({ initialName, symbol, isActive, onChangeName, is
       ) : (
         <Text style={styles.name}>{playerName}</Text>
       )}
-      <TouchableOpacity onPress={handleEditClick} style={styles.editButton} disabled={isNameChangeDisabled}>
+      <TouchableOpacity onPress={handleEditClick} style={styles.editButton}>
         <Text style={styles.editButtonText}>{isEditing ? "Save" : "Edit"}</Text>
       </TouchableOpacity>
     </View>

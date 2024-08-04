@@ -104,7 +104,7 @@ export default function GameScreen({ route }) {
     for (let square of emptySquares) {
       const { row, col } = square;
       gameBoard[row][col] = player;
-      if (deriveWinner(gameBoard, { X: 'Player 1', O: 'AI' }) === 'AI') {
+      if (deriveWinner(gameBoard, players) === players[player]) {
         gameBoard[row][col] = null; // Reset square
         return square;
       }
