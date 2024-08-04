@@ -64,9 +64,9 @@ export default function GameScreen({ route }) {
           });
           return acc;
         }, []);
-        const randomSquare =
-          emptySquares[Math.floor(Math.random() * emptySquares.length)];
-        handleSelectSquare(randomSquare.row, randomSquare.col);
+
+        const bestMove = getBestMove(emptySquares, gameBoard);
+        handleSelectSquare(bestMove.row, bestMove.col);
         setIsAITurn(false);
       }, 500);
       return () => clearTimeout(timer);
@@ -81,6 +81,36 @@ export default function GameScreen({ route }) {
         ...prevTurns,
       ]);
     }
+  }
+
+  function getBestMove(emptySquares, gameBoard) {
+    // Priority 1: AI can win
+    const aiWinningMove = findWinningMove(emptySquares, gameBoard, 'O');
+    if (aiWinningMove) return aiWinningMove;
+
+    // Priority 2: Block opponent's winning move
+    const opponentWinningMove = findWinningMove(emptySquares, gameBoard, 'X');
+    if (opponentWinningMove) return opponentWinningMove;
+
+    // Priority 3: Take center if available
+    const centerSquare = emptySquares.find(square => square.row === 1 && square.col === 1);
+    if (centerSquare) return centerSquare;
+
+    // Priority 4: Random move
+    return emptySquares[Math.floor(Math.random() * emptySquares.length)];
+  }
+
+  function findWinningMove(emptySquares, gameBoard, player) {
+    for (let square of emptySquares) {
+      const { row, col } = square;
+      gameBoard[row][col] = player;
+      if (deriveWinner(gameBoard, { X: 'Player 1', O: 'AI' }) === 'AI') {
+        gameBoard[row][col] = null; // Reset square
+        return square;
+      }
+      gameBoard[row][col] = null; // Reset square
+    }
+    return null;
   }
 
   function handleRestart() {
